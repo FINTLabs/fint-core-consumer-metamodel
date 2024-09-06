@@ -16,14 +16,24 @@ java {
 
 repositories {
 	mavenCentral()
+	maven {
+	    url("https://repo.fintlabs.no/releases")
+	}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	implementation 'no.fint:fint-utdanning-resource-model-java:3.18.1-rc-2'
+	implementation 'no.fint:fint-administrasjon-resource-model-java:3.18.1-rc-2'
+	implementation 'no.fint:fint-personvern-resource-model-java:3.18.1-rc-2'
+
+	implementation 'org.reflections:reflections:0.10.2'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
