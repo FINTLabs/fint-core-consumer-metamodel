@@ -17,7 +17,6 @@ class ReflectionService(
         Reflections("no.fint.model")
             .getSubTypesOf(FintModelObject::class.java)
             .forEach { clazz ->
-                println(clazz.name)
                 val fintModelObject = newInstanceOfFintModelObject(clazz)
                 val relationsMetadata = fintModelObject.relations.map { relation ->
                     FintRelationMetadata(
