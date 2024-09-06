@@ -24,9 +24,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	implementation 'no.fint:fint-utdanning-resource-model-java:3.18.1-rc-2'
-	implementation 'no.fint:fint-administrasjon-resource-model-java:3.18.1-rc-2'
-	implementation 'no.fint:fint-personvern-resource-model-java:3.18.1-rc-2'
+	implementation "no.fint:fint-utdanning-resource-model-java:${fintVersion}"
+	implementation "no.fint:fint-administrasjon-resource-model-java:${fintVersion}"
+	implementation "no.fint:fint-personvern-resource-model-java:${fintVersion}"
 
 	implementation 'org.reflections:reflections:0.10.2'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
