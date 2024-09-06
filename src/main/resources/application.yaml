@@ -1,5 +1,9 @@
 spring:
   application:
     name: fint-core-consumer-metamodel
-  webflux:
-    base-path: /metamodel
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger/ui
