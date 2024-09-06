@@ -1,4 +1,4 @@
-package no.fintlabs
+package no.fintlabs.metamodel
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -1,5 +1,6 @@
-package no.fintlabs
+package no.fintlabs.metamodel
 
+import no.fintlabs.metamodel.model.Metadata
 import org.springframework.stereotype.Service
 
 @Service
