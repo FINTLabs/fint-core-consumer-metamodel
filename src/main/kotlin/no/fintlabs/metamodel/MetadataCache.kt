@@ -20,7 +20,8 @@ class MetadataCache {
 
         metaData.packageName?.let { packageName ->
             val domainPackageKey = domain to packageName.lowercase()
-            domainPackageCache[domainPackageKey] = domainPackageCache.getOrDefault(domainPackageKey, mutableListOf()) + metaData
+            domainPackageCache[domainPackageKey] =
+                domainPackageCache.getOrDefault(domainPackageKey, mutableListOf()) + metaData
         }
 
         val resourceKey = Triple(domain, metaData.packageName?.lowercase() ?: "", metaData.resourceName.lowercase())
