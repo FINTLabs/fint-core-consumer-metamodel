@@ -47,24 +47,18 @@ class ReflectionService(
     }
 
     private fun createClazzMetadata(
-        clazz: Class<out FintModelObject>,
+        parentClazz: Class<out FintModelObject>,
         relationClazz: Class<out FintModelObject>,
         existingRelationPackages: MutableSet<String>
     ) {
         if (!existingRelationPackages.add(relationClazz.name)) return
         val fintModelObject = newInstanceOfFintModelObject(relationClazz)
         val relationsMetadatas = createRelationMetadatas(fintModelObject)
-        relationsMetadatas.forEach {
-            if (it.classPackageName.split(".").size == 4)
-                clazzMap[it.classPackageName]?.let { relationClazz ->
-                    createClazzMetadata(clazz, relationClazz, existingRelationPackages)
-                }
-        }
 
         metadataCache.add(
             Metadata(
-                clazz.packageName.split(".")[3],
-                clazz.packageName.split(".")[4],
+                parentClazz.packageName.split(".")[3],
+                parentClazz.packageName.split(".")[4],
                 relationClazz.simpleName.lowercase(),
                 fintModelObject.identifikators.keys,
                 fintModelObject.isWriteable,
