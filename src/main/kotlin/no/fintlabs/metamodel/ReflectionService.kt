@@ -2,8 +2,9 @@ package no.fintlabs.metamodel
 
 import jakarta.annotation.PostConstruct
 import no.fint.model.FintModelObject
-import no.fintlabs.metamodel.model.FintRelationMetadata
-import no.fintlabs.metamodel.model.Metadata
+import no.fintlabs.metamodel.metadata.MetadataCache
+import no.fintlabs.metamodel.metadata.model.FintRelationMetadata
+import no.fintlabs.metamodel.metadata.model.Metadata
 import org.reflections.Reflections
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors

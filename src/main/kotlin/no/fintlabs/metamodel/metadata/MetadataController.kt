@@ -1,6 +1,6 @@
-package no.fintlabs.metamodel
+package no.fintlabs.metamodel.metadata
 
-import no.fintlabs.metamodel.model.Metadata
+import no.fintlabs.metamodel.metadata.model.Metadata
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

@@ -1,13 +1,13 @@
-package no.fintlabs.metamodel
+package no.fintlabs.metamodel.metadata
 
-import no.fintlabs.metamodel.model.Metadata
+import no.fintlabs.metamodel.metadata.model.Metadata
 import org.springframework.stereotype.Service
 
 @Service
 class MetadataCache {
 
     private val domainCache: MutableMap<String, List<Metadata>> = mutableMapOf()
-    private val domainPackageCache: MutableMap<Pair<String, String>, List<Metadata>> = mutableMapOf()
+    val domainPackageCache: MutableMap<Pair<String, String>, List<Metadata>> = mutableMapOf()
     private val resourceCache: MutableMap<Triple<String, String, String>, Metadata> = mutableMapOf()
 
     val metamodels: MutableList<Metadata> = mutableListOf()

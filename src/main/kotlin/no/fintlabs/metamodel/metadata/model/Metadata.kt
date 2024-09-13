@@ -1,4 +1,4 @@
-package no.fintlabs.metamodel.model
+package no.fintlabs.metamodel.metadata.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
