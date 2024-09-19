@@ -7,6 +7,7 @@ data class Metadata(
     val domainName: String,
     val packageName: String?,
     val resourceName: String,
+    val fields: List<String>,
     val idFields: Set<String>,
     val writeable: Boolean,
     val relations: List<FintRelationMetadata>
