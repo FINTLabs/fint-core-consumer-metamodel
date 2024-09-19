@@ -1,5 +1,6 @@
 package no.fintlabs.metamodel
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.annotation.PostConstruct
 import no.fint.model.FintModelObject
 import no.fintlabs.metamodel.metadata.MetadataCache
@@ -7,7 +8,10 @@ import no.fintlabs.metamodel.metadata.model.FintRelationMetadata
 import no.fintlabs.metamodel.metadata.model.Metadata
 import org.reflections.Reflections
 import org.springframework.stereotype.Service
+import java.lang.reflect.Field
 import java.util.stream.Collectors
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.findAnnotation
 
 @Service
 class ReflectionService(
@@ -40,6 +44,7 @@ class ReflectionService(
                 clazz.packageName.split(".")[3],
                 clazz.packageName.split(".")[4],
                 clazz.simpleName.lowercase(),
+                getFieldNames(clazz),
                 fintModelObject.identifikators.keys,
                 fintModelObject.isWriteable,
                 relationsMetadatas
@@ -61,6 +66,7 @@ class ReflectionService(
                 parentClazz.packageName.split(".")[3],
                 parentClazz.packageName.split(".")[4],
                 relationClazz.simpleName.lowercase(),
+                getFieldNames(relationClazz),
                 fintModelObject.identifikators.keys,
                 fintModelObject.isWriteable,
                 relationsMetadatas
@@ -68,6 +74,25 @@ class ReflectionService(
         )
 
     }
+
+    private fun getFieldNames(clazz: Class<out FintModelObject>): List<String> {
+        val fieldNames = clazz.getAllFieldsRecursively()
+            .filter { !it.isAnnotationPresent(JsonIgnore::class.java) }
+            .map { it.name }
+
+        val propertyNames = clazz.getAllKotlinPropertiesRecursively()
+
+        return fieldNames + propertyNames
+    }
+
+    private fun Class<*>.getAllFieldsRecursively(): List<Field> =
+        this.declaredFields.toList() + (this.superclass?.takeIf { it != Any::class.java }?.getAllFieldsRecursively() ?: emptyList())
+
+    private fun Class<*>.getAllKotlinPropertiesRecursively(): List<String> =
+        this.kotlin.declaredMemberProperties
+            .filter { it.findAnnotation<JsonIgnore>() == null }
+            .map { it.name } +
+                (this.superclass?.takeIf { it != Any::class.java }?.getAllKotlinPropertiesRecursively() ?: emptyList())
 
     private fun createClazzMap(): Map<String, Class<out FintModelObject>> =
         Reflections("no.fint.model")
