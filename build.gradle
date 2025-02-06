@@ -1,12 +1,14 @@
 plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.9.25'
 	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
-	id 'org.springframework.boot' version '3.3.3'
+	id 'org.springframework.boot' version '3.3.3' apply false
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'maven-publish'
+	id 'java-library'
 }
 
 group = 'no.fintlabs'
-version = '0.0.1-SNAPSHOT'
+version = project.findProperty("version") ?: "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
@@ -14,27 +16,43 @@ java {
 	}
 }
 
-repositories {
-	mavenCentral()
-	maven {
-	    url("https://repo.fintlabs.no/releases")
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		mavenLocal()
 	}
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.6.0'
+dependencyManagement {
+	imports {
+		mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+	}
+}
 
-	implementation "no.fint:fint-utdanning-resource-model-java:${fintVersion}"
-	implementation "no.fint:fint-arkiv-resource-model-java:${fintVersion}"
-	implementation "no.fint:fint-okonomi-resource-model-java:${fintVersion}"
-	implementation "no.fint:fint-ressurs-resource-model-java:${fintVersion}"
-	implementation "no.fint:fint-administrasjon-resource-model-java:${fintVersion}"
-	implementation "no.fint:fint-personvern-resource-model-java:${fintVersion}"
+repositories {
+	maven {
+		url("https://repo.fintlabs.no/releases")
+	}
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter:3.3.3'
+
+	api "no.fint:fint-utdanning-resource-model-java:${fintVersion}"
+	api "no.fint:fint-arkiv-resource-model-java:${fintVersion}"
+	api "no.fint:fint-okonomi-resource-model-java:${fintVersion}"
+	api "no.fint:fint-ressurs-resource-model-java:${fintVersion}"
+	api "no.fint:fint-administrasjon-resource-model-java:${fintVersion}"
+	api "no.fint:fint-personvern-resource-model-java:${fintVersion}"
 
 	implementation 'org.reflections:reflections:0.10.2'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
+	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions:1.1.7'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
 
@@ -42,6 +60,10 @@ dependencies {
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
 	testImplementation 'io.projectreactor:reactor-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+jar {
+	enabled = true
 }
 
 kotlin {
@@ -53,3 +75,5 @@ kotlin {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/master/reposilite.ga.gradle'
