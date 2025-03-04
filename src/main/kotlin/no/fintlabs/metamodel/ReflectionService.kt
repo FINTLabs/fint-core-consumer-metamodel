@@ -7,6 +7,7 @@ import no.fintlabs.metamodel.metadata.MetadataCache
 import no.fintlabs.metamodel.metadata.model.FintRelationMetadata
 import no.fintlabs.metamodel.metadata.model.Metadata
 import org.reflections.Reflections
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.lang.reflect.Field
 import java.util.stream.Collectors
@@ -15,14 +16,17 @@ import kotlin.reflect.full.findAnnotation
 
 @Service
 class ReflectionService(
-    val metadataCache: MetadataCache,
+    val metadataCache: MetadataCache
 ) {
 
     val clazzMap: Map<String, Class<out FintModelObject>> = createClazzMap()
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     @PostConstruct
     fun fillCache() {
-        clazzMap.forEach { createClazzMetadata(it.value) }
+        clazzMap.forEach {
+            createClazzMetadata(it.value)
+        }
     }
 
     private fun createClazzMetadata(clazz: Class<out FintModelObject>) {
@@ -86,7 +90,8 @@ class ReflectionService(
     }
 
     private fun Class<*>.getAllFieldsRecursively(): List<Field> =
-        this.declaredFields.toList() + (this.superclass?.takeIf { it != Any::class.java }?.getAllFieldsRecursively() ?: emptyList())
+        this.declaredFields.toList() + (this.superclass?.takeIf { it != Any::class.java }?.getAllFieldsRecursively()
+            ?: emptyList())
 
     private fun Class<*>.getAllKotlinPropertiesRecursively(): List<String> =
         this.kotlin.declaredMemberProperties
