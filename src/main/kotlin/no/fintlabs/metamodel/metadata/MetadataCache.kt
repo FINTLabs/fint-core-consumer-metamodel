@@ -1,43 +1,25 @@
 package no.fintlabs.metamodel.metadata
 
-import no.fintlabs.metamodel.metadata.model.Metadata
+import no.fintlabs.metamodel.metadata.model.Resource
 import org.springframework.stereotype.Service
 
 @Service
 class MetadataCache {
 
-    private val domainCache: MutableMap<String, List<Metadata>> = mutableMapOf()
-    val domainPackageCache: MutableMap<Pair<String, String>, List<Metadata>> = mutableMapOf()
-    private val resourceCache: MutableMap<Triple<String, String, String>, Metadata> = mutableMapOf()
+    private val cache: MutableMap<String, MutableSet<Resource>> = mutableMapOf()
 
-    val metamodels: MutableList<Metadata> = mutableListOf()
+    fun getResources(domainName: String, packageName: String): Collection<Resource> =
+        cache.getOrDefault(formatComponentName(domainName, packageName), mutableSetOf())
 
-    fun add(metaData: Metadata) {
-        metamodels.add(metaData)
+    fun componentExists(domainName: String, packageName: String) =
+        cache.containsKey(formatComponentName(domainName, packageName))
 
-        val domain = metaData.domainName.lowercase()
-        domainCache[domain] = domainCache.getOrDefault(domain, mutableListOf()) + metaData
+    private fun getOrSetDefault(domainName: String, packageName: String) =
+        cache.getOrPut(formatComponentName(domainName, packageName)) { mutableSetOf() }
 
-        metaData.packageName?.let { packageName ->
-            val domainPackageKey = domain to packageName.lowercase()
-            domainPackageCache[domainPackageKey] =
-                domainPackageCache.getOrDefault(domainPackageKey, mutableListOf()) + metaData
-        }
+    fun addResource(domainName: String, packageName: String, resource: Resource) =
+        getOrSetDefault(domainName, packageName).add(resource)
 
-        val resourceKey = Triple(domain, metaData.packageName?.lowercase() ?: "", metaData.resourceName.lowercase())
-        resourceCache[resourceKey] = metaData
-    }
-
-    fun getByDomain(domain: String): List<Metadata>? {
-        return domainCache[domain.lowercase()]
-    }
-
-    fun getByDomainAndPackage(domain: String, packageName: String): List<Metadata>? {
-        return domainPackageCache[domain.lowercase() to packageName.lowercase()]
-    }
-
-    fun getByDomainPackageAndResource(domain: String, packageName: String, resourceName: String): Metadata? {
-        return resourceCache[Triple(domain.lowercase(), packageName.lowercase(), resourceName.lowercase())]
-    }
+    private fun formatComponentName(domainName: String, packageName: String) = "$domainName.$packageName"
 
 }
