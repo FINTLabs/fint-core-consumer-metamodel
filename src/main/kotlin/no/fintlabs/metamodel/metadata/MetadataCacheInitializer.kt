@@ -1,36 +1,55 @@
 package no.fintlabs.metamodel.metadata
 
 import jakarta.annotation.PostConstruct
+import no.fint.model.FintModelObject
+import no.fint.model.resource.FintResource
 import no.fintlabs.metamodel.ReflectionService
+import no.fintlabs.metamodel.metadata.mapper.ResourceMapper
 import no.fintlabs.metamodel.metadata.model.Resource
 import org.springframework.stereotype.Service
 
 @Service
 class MetadataCacheInitializer(
     private val metadataCache: MetadataCache,
-    reflectionService: ReflectionService
+    private val resourceMapper: ResourceMapper,
+    private val reflectionService: ReflectionService
 ) {
 
-    private val resourceMap =
-        reflectionService.reflectionObjects
-            .associate { it.javaClass.name to Resource.from(it) }
-
     @PostConstruct
-    fun init() =
-        resourceMap.values.forEach { resource ->
-            val (domainName, packageName) = getDomainAndPackageName(resource.packageName)
-            packageName?.let {
-                resource.relations
-                    .mapNotNull { relation -> resourceMap[relation.packageName] }
-                    .filter { it.isCommon } + listOf(resource)
-                    .forEach {
-                        println("$domainName -> $packageName")
-                        metadataCache.addResource(domainName, packageName, it)
-                    }
-            }
+    fun initializeCache() =
+        createResources().forEach { resource ->
+            getAllCommonResources(resource)
+                .map(::createResource) + listOf(resource)
+                .forEach {
+                    metadataCache.addResource(
+                        resource.component.domainName,
+                        resource.component.packageName,
+                        it
+                    )
+                }
         }
 
-    private fun getDomainAndPackageName(clazzPackageName: String): Pair<String, String?> =
-        clazzPackageName.split(".").let { it[3] to it.getOrNull(4) }
+    private fun createResources(): List<Resource> =
+        reflectionService.fintModelObjects.values
+            .map(::createResource)
+
+    private fun createResource(fintModelObject: FintModelObject): Resource =
+        resourceMapper.createResource(
+            fintModelObject,
+            getResourceType(fintModelObject.javaClass.packageName)
+        )
+
+    private fun getResourceType(packageName: String): Class<out FintResource> =
+        reflectionService.fintResourceObjects[packageName]
+            ?: error("Couldn't find resource: $packageName")
+
+    private fun getAllCommonResources(resource: Resource) =
+        resource.relations
+            .mapNotNull { reflectionService.fintModelObjects[it.packageName] }
+            .filter { isCommon(it.javaClass.packageName) }
+
+
+    private fun isCommon(packageName: String): Boolean =
+        packageName.startsWith("no.fint.model.felles")
 
 }
