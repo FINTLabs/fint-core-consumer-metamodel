@@ -1,4 +1,4 @@
-package no.fintlabs.metamodel.metadata.model
+package no.fintlabs.metamodel.model
 
 import no.fint.model.FintRelation
 import no.fint.model.resource.FintResource

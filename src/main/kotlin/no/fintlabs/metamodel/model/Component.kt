@@ -1,10 +1,10 @@
-package no.fintlabs.metamodel.metadata.model
+package no.fintlabs.metamodel.model
 
 data class Component(
     val domainName: String,
-    val packageName: String
+    val packageName: String?
 ) {
-    val name: String = "${domainName.lowercase()}-${packageName.lowercase()}"
+    val name: String = "${domainName.lowercase()}-${packageName?.lowercase()}"
 
     private fun normalized(): String = name
 
@@ -12,6 +12,7 @@ data class Component(
         input.lowercase()
             .replace(".", "-")
             .replace("_", "-")
+            .replace(" ", "-")
 
     override fun equals(other: Any?): Boolean {
         return when (other) {

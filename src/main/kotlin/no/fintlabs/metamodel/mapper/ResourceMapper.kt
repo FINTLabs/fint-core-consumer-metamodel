@@ -1,10 +1,10 @@
-package no.fintlabs.metamodel.metadata.mapper
+package no.fintlabs.metamodel.mapper
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import no.fint.model.FintModelObject
 import no.fint.model.resource.FintResource
-import no.fintlabs.metamodel.metadata.model.Component
-import no.fintlabs.metamodel.metadata.model.Resource
+import no.fintlabs.metamodel.model.Component
+import no.fintlabs.metamodel.model.Resource
 import org.springframework.stereotype.Service
 import java.lang.reflect.Modifier
 
@@ -15,7 +15,7 @@ class ResourceMapper {
         Resource(
             name = fintModelObject.javaClass.simpleName,
             component = createComponent(fintModelObject),
-            packageName = fintModelObject.javaClass.packageName,
+            packageName = fintModelObject.javaClass.name,
             resourceType = resourceType,
             isCommon = isCommon(fintModelObject.javaClass.packageName),
             writeable = fintModelObject.isWriteable,
@@ -28,8 +28,8 @@ class ResourceMapper {
         getDomainAndPackage(fintModelObject.javaClass.packageName)
             .let { (domainName, packageName) -> Component(domainName, packageName) }
 
-    private fun getDomainAndPackage(clazzPackage: String): Pair<String, String> =
-        clazzPackage.split(".").let { it[3] to it[4] }
+    private fun getDomainAndPackage(clazzPackage: String): Pair<String, String?> =
+        clazzPackage.split(".").let { it[3] to it.getOrNull(4) }
 
     private fun isCommon(packageName: String) =
         packageName.split(".").size == 4

@@ -15,12 +15,17 @@ class ReflectionService(
 
     private fun initializeFintResources(reflections: Reflections) =
         reflections.getSubTypesOf(FintResource::class.java)
-            .associateBy { it.packageName.replace(".resource", "") }
+            .associateBy {
+                println(it.name.replace(".resource", "")
+                    .replace("Resource", ""))
+                it.name.replace(".resource", "")
+                    .replace("Resource", "")
+            }
 
     private fun initializeFintModelObjects(reflections: Reflections) =
         reflections.getSubTypesOf(FintModelObject::class.java)
             .map { initializeFintModelObject(it) }
-            .associateBy { it.javaClass.packageName }
+            .associateBy { it.javaClass.name }
 
     fun initializeFintModelObject(clazz: Class<out FintModelObject>): FintModelObject =
         runCatching { clazz.getDeclaredConstructor().newInstance() }
