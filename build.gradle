@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.9.25'
 	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
@@ -5,20 +7,21 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'maven-publish'
 	id 'java-library'
+	id 'org.jetbrains.dokka' version '1.9.20'
 }
 
 group = 'no.fintlabs'
 version = project.findProperty("version") ?: "0.0.1-SNAPSHOT"
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+	toolchain {languageVersion = JavaLanguageVersion.of(21) }
+	withSourcesJar()
+	withJavadocJar()
 }
 
 dependencyManagement {
 	imports {
-		mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+		mavenBom SpringBootPlugin.BOM_COORDINATES
 	}
 }
 
@@ -63,6 +66,11 @@ kotlin {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.named('javadocJar') {
+	dependsOn tasks.named('dokkaHtml')
+	from tasks.named('dokkaHtml').flatMap { it.outputDirectory }
 }
 
 apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/master/reposilite.ga.gradle'
