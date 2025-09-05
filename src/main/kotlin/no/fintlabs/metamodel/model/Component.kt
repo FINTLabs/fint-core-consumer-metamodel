@@ -1,28 +1,17 @@
 package no.fintlabs.metamodel.model
 
-data class Component(
-    val domainName: String,
-    val packageName: String?
+class Component(
+    component: String,
+    format: String,
+    val resources: List<Resource>
 ) {
-    val name: String = "${domainName.lowercase()}-${packageName?.lowercase()}"
+    val domainName: String = component.split("-").first()
+    val packageName: String = component.split("-").last()
+    val name: String = "${domainName.lowercase()}${format}${packageName.lowercase()}"
 
-    private fun normalized(): String = name
+    fun nameEquals(domainName: String, packageName: String) =
+        this.domainName.equals(domainName, ignoreCase = true) &&
+                this.packageName.equals(packageName, ignoreCase = true)
 
-    private fun normalizeInput(input: String): String =
-        input.lowercase()
-            .replace(".", "-")
-            .replace("_", "-")
-            .replace(" ", "-")
 
-    override fun equals(other: Any?): Boolean {
-        return when (other) {
-            is Component -> this.normalized() == other.normalized()
-            is String -> this.normalized() == normalizeInput(other)
-            else -> false
-        }
-    }
-
-    override fun hashCode(): Int = normalized().hashCode()
-
-    override fun toString(): String = name
 }

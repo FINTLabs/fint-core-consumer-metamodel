@@ -16,8 +16,6 @@ class ReflectionService(
     private fun initializeFintResources(reflections: Reflections) =
         reflections.getSubTypesOf(FintResource::class.java)
             .associateBy {
-                println(it.name.replace(".resource", "")
-                    .replace("Resource", ""))
                 it.name.replace(".resource", "")
                     .replace("Resource", "")
             }
