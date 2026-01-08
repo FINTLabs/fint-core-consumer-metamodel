@@ -1,7 +1,7 @@
 package no.fintlabs.metamodel.model
 
-import no.fint.model.FintRelation
-import no.fint.model.resource.FintResource
+import no.novari.fint.model.FintRelation
+import no.novari.fint.model.resource.FintResource
 
 class Resource(
     name: String,

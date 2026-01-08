@@ -1,8 +1,8 @@
 package no.fintlabs.metamodel.mapper
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import no.fint.model.FintModelObject
-import no.fint.model.resource.FintResource
+import no.novari.fint.model.FintModelObject
+import no.novari.fint.model.resource.FintResource
 import no.fintlabs.metamodel.model.Resource
 import org.springframework.stereotype.Service
 import java.lang.reflect.Modifier
@@ -23,7 +23,7 @@ class ResourceMapper {
         )
 
     private fun isCommon(packageName: String) =
-        packageName.split(".").size == 4
+        packageName.split(".").size == 5
 
     private fun getFields(clazz: Class<*>): Set<String> =
         generateSequence(clazz) { it.superclass }

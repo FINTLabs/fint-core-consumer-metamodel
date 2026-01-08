@@ -1,7 +1,7 @@
 package no.fintlabs.metamodel.model.builder
 
-import no.fint.model.FintModelObject
-import no.fint.model.resource.FintResource
+import no.novari.fint.model.FintModelObject
+import no.novari.fint.model.resource.FintResource
 import no.fintlabs.metamodel.ReflectionService
 import no.fintlabs.metamodel.mapper.ResourceMapper
 import no.fintlabs.metamodel.model.Resource
@@ -53,9 +53,9 @@ class ResourceBuilder(
             ?: error("Couldn't find resource: $packageName")
 
     private fun getDomainAndPackage(clazzPackage: String): Pair<String, String> =
-        clazzPackage.split(".").let { it[3] to it[4] }
+        clazzPackage.split(".").let { it[4] to it[5] }
 
     private fun isCommon(packageName: String): Boolean =
-        packageName.startsWith("no.fint.model.felles")
+        packageName.startsWith("no.novari.fint.model.felles")
 
 }

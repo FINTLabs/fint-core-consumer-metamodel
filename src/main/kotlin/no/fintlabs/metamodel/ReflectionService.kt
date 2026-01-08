@@ -1,13 +1,13 @@
 package no.fintlabs.metamodel
 
-import no.fint.model.FintModelObject
-import no.fint.model.resource.FintResource
+import no.novari.fint.model.FintModelObject
+import no.novari.fint.model.resource.FintResource
 import org.reflections.Reflections
 import org.springframework.stereotype.Service
 
 @Service
 class ReflectionService(
-    reflections: Reflections = Reflections("no.fint.model")
+    reflections: Reflections = Reflections("no.novari.fint.model")
 ) {
 
     val fintModelObjects: Map<String, FintModelObject> = initializeFintModelObjects(reflections)
