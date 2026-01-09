@@ -85,7 +85,7 @@ class ComponentBuilder(
 
     // I have no idea what felles kodeverk iso is used for, there are no consumers of it. So I skip it.
     private fun FintModelObject.isNotKodeverkIso() =
-        this.javaClass.packageName != "no.fint.model.felles.kodeverk.iso"
+        this.javaClass.packageName != "no.novari.fint.model.felles.kodeverk.iso"
 
     private fun FintModelObject.toResourceContext() =
         ResourceContext(this, this.resourceClass())
