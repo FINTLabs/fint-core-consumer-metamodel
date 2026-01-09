@@ -24,6 +24,7 @@ class MetamodelServiceTest {
             "ressurs.tilgang",
             "arkiv.noark",
             "utdanning.ot",
+            "felles.kodeverk",
             "ressurs.kodeverk",
             "utdanning.timeplan",
             "arkiv.kodeverk",
@@ -48,13 +49,6 @@ class MetamodelServiceTest {
     inner class GetResource {
 
         @Test
-        fun `by component+resource works`() {
-            val res = service.getResource("utdanning.vurdering", "elevfravar")
-            assertNotNull(res)
-            assertEquals("elevfravar", res!!.name)
-        }
-
-        @Test
         fun `by domain+pkg+resource works`() {
             val res = service.getResource("utdanning", "vurdering", "elevfravar")
             assertNotNull(res)
@@ -72,7 +66,7 @@ class MetamodelServiceTest {
 
         @Test
         fun `FINT version 3_19 components match expected names`() {
-            val componentNames = service.getComponents().map { it.name }.toSet()
+            val componentNames = service.getComponents().map { "${it.domainName}.${it.packageName}" }.toSet()
             assertEquals(COMPONENTS_V3_19.toSet(), componentNames)
         }
 

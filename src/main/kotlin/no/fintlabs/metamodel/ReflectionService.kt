@@ -10,8 +10,12 @@ class ReflectionService(
     reflections: Reflections = Reflections("no.novari.fint.model")
 ) {
 
-    val fintModelObjects: Map<String, FintModelObject> = initializeFintModelObjects(reflections)
-    val fintResourceObjects: Map<String, Class<out FintResource>> = initializeFintResources(reflections)
+    private val fintModelObjects: Map<String, FintModelObject> = initializeFintModelObjects(reflections)
+    private val fintResourceObjects: Map<String, Class<out FintResource>> = initializeFintResources(reflections)
+
+    fun getFintModelObjects() = fintModelObjects.values
+    fun getFintModelObject(className: String) = fintModelObjects[className]
+    fun getResourceClass(className: String) = fintResourceObjects[className]
 
     private fun initializeFintResources(reflections: Reflections) =
         reflections.getSubTypesOf(FintResource::class.java)
