@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class MetamodelServiceTest {
 
     companion object {
-        private val COMPONENTS_V3_19 = listOf(
+        private val COMPONENTS_V4_0_0 = listOf(
             "arkiv.samferdsel",
             "utdanning.larling",
             "utdanning.vurdering",
@@ -62,12 +62,12 @@ class MetamodelServiceTest {
 
         @Test
         fun `FINT version 3_19 has expected number of components`() =
-            assertEquals(COMPONENTS_V3_19.size, service.getComponents().size)
+            assertEquals(COMPONENTS_V4_0_0.size, service.getComponents().size)
 
         @Test
         fun `FINT version 3_19 components match expected names`() {
             val componentNames = service.getComponents().map { "${it.domainName}.${it.packageName}" }.toSet()
-            assertEquals(COMPONENTS_V3_19.toSet(), componentNames)
+            assertEquals(COMPONENTS_V4_0_0.toSet(), componentNames)
         }
 
     }
