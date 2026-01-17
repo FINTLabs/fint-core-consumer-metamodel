@@ -5,7 +5,6 @@ import no.fint.model.FintModelObject
 import no.fint.model.FintRelation
 import no.fint.model.resource.FintResource
 import java.lang.reflect.Modifier
-import kotlin.jvm.java
 
 
 class Resource(
@@ -17,7 +16,8 @@ class Resource(
     val writeable: Boolean,
     val fields: Set<String>,
     val idFields: Set<String>,
-    val relations: List<FintRelation>
+    val relations: List<FintRelation>,
+    val relationUri: Map<String, String>
 ) {
     val name: String = name.lowercase()
 }
@@ -35,14 +35,27 @@ fun createResource(
             resourceClass = resourceClass,
             isCommon = javaClass.packageName.split(".").size == 4,
             writeable = fintModelObject.isWriteable,
-            fields = getFields(javaClass),
+            fields = javaClass.getNonIgnoredFields(),
             idFields = fintModelObject.identifikators.keys,
-            relations = fintModelObject.relations
+            relations = fintModelObject.relations,
+            relationUri = fintModelObject.relations.associate { it.name to it.toRelationUri(component) }
         )
     }
 
-private fun getFields(clazz: Class<*>) =
-    generateSequence(clazz) { it.superclass }
+fun FintRelation.toRelationUri(component: Component): String {
+    val parts = this.packageName.split(".")
+
+    val path = if (parts.size == 5) {
+        "${component.domainName}/${component.packageName}/${parts.last()}"
+    } else {
+        parts.takeLast(3).joinToString("/")
+    }
+
+    return path.lowercase()
+}
+
+private fun Class<*>.getNonIgnoredFields() =
+    generateSequence(this) { it.superclass }
         .takeWhile { it != Any::class.java }
         .flatMap { it.declaredFields.asSequence() }
         .filter { field ->
