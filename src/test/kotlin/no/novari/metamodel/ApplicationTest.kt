@@ -1,9 +1,9 @@
-package no.fintlabs.metamodel
+package no.novari.metamodel
 
 import org.springframework.boot.SpringBootConfiguration
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootConfiguration
-@ComponentScan(basePackages = ["no.fintlabs.metamodel"])
+@ComponentScan(basePackages = ["no.novari"])
 class ApplicationTest {
 }

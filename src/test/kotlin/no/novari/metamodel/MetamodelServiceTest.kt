@@ -1,6 +1,5 @@
-package no.fintlabs.metamodel
+package no.novari.metamodel
 
-import no.novari.metamodel.MetamodelService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName
@@ -24,6 +23,7 @@ class MetamodelServiceTest {
             "administrasjon.personal",
             "ressurs.tilgang",
             "arkiv.noark",
+            "ressurs.datautstyr",
             "utdanning.ot",
             "felles.kodeverk",
             "ressurs.kodeverk",
@@ -62,11 +62,11 @@ class MetamodelServiceTest {
     inner class GetComponent {
 
         @Test
-        fun `FINT version 3_19 has expected number of components`() =
+        fun `FINT version 4_0 has expected number of components`() =
             assertEquals(COMPONENTS_V4_0_0.size, service.getComponents().size)
 
         @Test
-        fun `FINT version 3_19 components match expected names`() {
+        fun `FINT version 4_0 components match expected names`() {
             val componentNames = service.getComponents().map { "${it.domainName}.${it.packageName}" }.toSet()
             assertEquals(COMPONENTS_V4_0_0.toSet(), componentNames)
         }
