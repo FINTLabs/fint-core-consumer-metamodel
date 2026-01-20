@@ -1,4 +1,4 @@
-package no.fintlabs.metamodel
+package no.novari.metamodel
 
 import no.novari.fint.model.FintModelObject
 import no.novari.fint.model.resource.FintResource

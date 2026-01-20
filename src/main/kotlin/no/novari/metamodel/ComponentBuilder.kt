@@ -1,9 +1,9 @@
-package no.fintlabs.metamodel
+package no.novari.metamodel
 
-import no.fintlabs.metamodel.model.Component
-import no.fintlabs.metamodel.model.Resource
-import no.fintlabs.metamodel.model.createComponent
-import no.fintlabs.metamodel.model.createResource
+import no.novari.metamodel.model.Component
+import no.novari.metamodel.model.Resource
+import no.novari.metamodel.model.createComponent
+import no.novari.metamodel.model.createResource
 import no.novari.fint.model.FintModelObject
 import no.novari.fint.model.FintRelation
 import no.novari.fint.model.resource.FintResource

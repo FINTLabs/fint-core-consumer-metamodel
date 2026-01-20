@@ -1,5 +1,6 @@
 package no.fintlabs.metamodel
 
+import no.novari.metamodel.MetamodelService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName

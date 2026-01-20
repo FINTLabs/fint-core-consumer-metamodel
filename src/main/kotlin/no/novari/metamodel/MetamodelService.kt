@@ -1,7 +1,7 @@
-package no.fintlabs.metamodel
+package no.novari.metamodel
 
-import no.fintlabs.metamodel.model.Component
-import no.fintlabs.metamodel.model.Resource
+import no.novari.metamodel.model.Component
+import no.novari.metamodel.model.Resource
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,4 +1,4 @@
-package no.fintlabs.metamodel.model
+package no.novari.metamodel.model
 
 data class Component(
     val domainName: String,

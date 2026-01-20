@@ -1,4 +1,4 @@
-package no.fintlabs.metamodel.model
+package no.novari.metamodel.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import no.novari.fint.model.FintModelObject
