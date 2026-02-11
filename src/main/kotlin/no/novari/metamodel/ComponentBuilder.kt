@@ -21,7 +21,7 @@ class ComponentBuilder(
 
     fun buildComponents(): List<Component> =
         createBaseResourceContexts()
-            .groupBy { it.fintModelObject.javaClass.packageName }
+            .groupBy { it.fintModelObject.javaClass.`package`.name }
             .map { (packageName, resourceContexts) ->
                 val component = packageName.createComponent()
                 val resources = resourceContexts.createResources(component)
@@ -85,7 +85,7 @@ class ComponentBuilder(
 
     // I have no idea what felles kodeverk iso is used for, there are no consumers of it. So I skip it.
     private fun FintModelObject.isNotKodeverkIso() =
-        this.javaClass.packageName != "no.novari.fint.model.felles.kodeverk.iso"
+        this.javaClass.`package`.name != "no.novari.fint.model.felles.kodeverk.iso"
 
     private fun FintModelObject.toResourceContext() =
         ResourceContext(this, this.resourceClass())

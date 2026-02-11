@@ -1,19 +1,19 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-	id 'org.jetbrains.kotlin.jvm' version '1.9.25'
-	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
-	id 'org.springframework.boot' version '3.3.3' apply false
-	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.7.10'
+	id 'org.springframework.boot' version '2.7.18' apply false
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'maven-publish'
 	id 'java-library'
 }
 
-group = 'no.novari'
-version = project.findProperty("version") ?: "0.0.1-SNAPSHOT"
+version="0.0.1-SNAPSHOT"
+group="no.novari"
 
 java {
-	toolchain {languageVersion = JavaLanguageVersion.of(21) }
+	toolchain { languageVersion = JavaLanguageVersion.of(8) }
 	withSourcesJar()
 	withJavadocJar()
 }
@@ -25,66 +25,61 @@ dependencyManagement {
 }
 
 repositories {
-	maven {
-		url("https://repo.fintlabs.no/releases")
-	}
+	maven { url("https://repo.fintlabs.no/releases") }
 	mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter:3.3.3'
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.springframework.boot:spring-boot-starter")
 
 	implementation("no.novari:fint-model-core:1.0.0")
-	implementation('no.novari:fint-model-resource:1.0.1')
+	implementation("no.novari:fint-model-resource:1.0.1")
 
-	implementation 'org.reflections:reflections:0.10.2'
-	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions:1.1.7'
-	implementation 'org.jetbrains.kotlin:kotlin-reflect'
-	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+	implementation("org.reflections:reflections:0.10.2")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-	testImplementation "no.novari:fint-utdanning-resource-model-java:${fintVersion}"
-	testImplementation "no.novari:fint-administrasjon-resource-model-java:${fintVersion}"
-	testImplementation "no.novari:fint-personvern-resource-model-java:${fintVersion}"
-	testImplementation "no.novari:fint-okonomi-resource-model-java:${fintVersion}"
-	testImplementation "no.novari:fint-ressurs-resource-model-java:${fintVersion}"
-	testImplementation "no.novari:fint-arkiv-resource-model-java:${fintVersion}"
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
-	testImplementation 'io.projectreactor:reactor-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation("no.novari:fint-utdanning-resource-model-java:${fintVersion}")
+	testImplementation("no.novari:fint-administrasjon-resource-model-java:${fintVersion}")
+	testImplementation("no.novari:fint-personvern-resource-model-java:${fintVersion}")
+	testImplementation("no.novari:fint-okonomi-resource-model-java:${fintVersion}")
+	testImplementation("no.novari:fint-ressurs-resource-model-java:${fintVersion}")
+	testImplementation("no.novari:fint-arkiv-resource-model-java:${fintVersion}")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testImplementation("io.projectreactor:reactor-test")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-publishing {
-    repositories {
-        maven {
-            url "https://repo.fintlabs.no/releases"
-            credentials {
-                username = System.getenv("REPOSILITE_USERNAME")
-                password = System.getenv("REPOSILITE_PASSWORD")
-            }
-            authentication {
-                basic(BasicAuthentication)
-            }
-        }
-    }
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
 
-jar {
-	enabled = true
-}
-
-kotlin {
-	compilerOptions {
-		freeCompilerArgs.addAll '-Xjsr305=strict'
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+	kotlinOptions {
+		jvmTarget = "1.8"
+		freeCompilerArgs += ["-Xjsr305=strict"]
 	}
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+			groupId = project.group.toString()
+			artifactId = project.name
+			version = project.version.toString()
+		}
+	}
+	repositories {
+		mavenLocal()
+	}
+}
+
+
+
+jar { enabled = true }

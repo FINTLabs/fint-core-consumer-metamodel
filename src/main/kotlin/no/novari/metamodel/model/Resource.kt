@@ -33,7 +33,7 @@ fun createResource(
             component = component,
             className = javaClass.name,
             resourceClass = resourceClass,
-            isCommon = javaClass.packageName.split(".").size == 4,
+            isCommon = javaClass.`package`.name.split(".").size == 4,
             writeable = fintModelObject.isWriteable,
             fields = getFields(javaClass),
             idFields = fintModelObject.identifikators.keys,
